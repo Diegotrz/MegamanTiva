@@ -55,15 +55,16 @@ int xsl1= 0;
 int xsl2= 0; 
 // posiciones de J1 y J2 en pantalla
 int posx1 = 135;
-int posy1 = 105;
+int posy1 = 153;
 int posx2 = 60;
-int posy2 = 100;
+int posy2 = 153;
 int anclas_aviones[2] = {0, 0};
 
 // Variables para control de estados del juego (jugando, fin del juego, reinicio, etc)
 bool jugando = false, ganador = false, apagarControlJ1 = false, apagarControlJ2 = false; 
-
-
+//Variables para la generacion de los cuadros de la reduccion de la barra de vida
+int reducx1 = 0;
+int reducx2 = 0;
 //***************************************************************************************************************************************
 // Functions Prototypes
 //***************************************************************************************************************************************
@@ -188,7 +189,7 @@ while (pj1 <=600){
     delay(3);
     
   int anim2 = (x/35)%4;
-  LCD_Sprite(135,105,40,40,xrun,4,anim2,0,1);
+  LCD_Sprite(135,148,40,40,xrun,4,anim2,0,1);
   //int anim = (x/35)%3;
   //LCD_Sprite(0,0,320,240,fondmov,3,anim,0,0);
   
@@ -197,7 +198,9 @@ while (pj1 <=600){
   } 
   LCD_Clear(0x00);
   fondtr();  
-  LCD_Bitmap(150, 105, 34, 35, xsing);
+  grafvid();
+  reducvid();
+  //LCD_Bitmap(150, 105, 34, 35, xsing);
 }
 
 //***************************************************************************************************************************************
@@ -208,15 +211,16 @@ PB1State = digitalRead(PB1);
 PB2State = digitalRead(PB2);
 // Control de movimientos y desactivación de controles cuando un jugador pierde 
   if (PB1State == 0 && !apagarControlJ2){
-    anclas_aviones[1] = jump_2(PB1State, 50, 34, 35, xsing);
+    anclas_aviones[1] = jump_2(PB1State, 85, 34, 35, xsing);
   } else {
     if (apagarControlJ2){
       FillRect(posx2, anclas_aviones[1], 38, 28, fill_color);
     } else {
-      anclas_aviones[1] = fall_2(105, 34, 35, xsing);
+      anclas_aviones[1] = fall_2(153, 34, 35, xsing);
     }
   }
   if (PB2State == 0 && !apagarControlJ1){
+   anclas_aviones[1]= mov_1(PB2State ,0,282, 34, 35, xsing);
    // anclas_aviones[0] = jump_1(PB2State, 10, 40, 40, xrun);
   } else {
     if (apagarControlJ1){
@@ -293,6 +297,41 @@ PB2State = digitalRead(PB2);
 */
 }
 //***************************************************************************************************************************************
+// Función para inicializar los gráficos de las vidas
+//***************************************************************************************************************************************
+void grafvid(void){
+ FillRect(30, 60, 80, 15, 0x2623);  //Cuadro que genera la primera barra de vida
+ FillRect(213, 60, 80, 15, 0x2623); //Cuadro que genera la segunda barra de vida
+ String textj1 = "J1"; 
+ LCD_Print(textj1,10 ,60, 1, 0xffff,0x66FC ); 
+String textj2 = "J2"; 
+ LCD_Print(textj2,300 ,60, 1, 0xffff,0x66FC ); 
+//Bordes para la primera barra de vida
+ FillRect(30, 60, 80, 3, 0xA514); //Borde superior 
+ FillRect(30, 75, 83, 3, 0xA514); //Borde inferior
+ FillRect(30, 60, 3, 15, 0xA514); //Borde lateral izq
+ FillRect(110, 60, 3, 15, 0xA514); //Borde lateral derecho
+//Bordes para la segunda barra de vida
+ FillRect(213, 60, 80, 3, 0xA514); //Borde superior 
+ FillRect(213, 75, 83, 3, 0xA514); //Borde inferior
+ FillRect(213, 60, 3, 15, 0xA514); //Borde lateral izq
+ FillRect(293, 60, 3, 15, 0xA514); //Borde lateral derecho
+ 
+  }
+//***************************************************************************************************************************************
+// Función para la reducción de la vida
+//***************************************************************************************************************************************
+void reducvid (void){
+ reducx1 = 90;
+ reducx2 =  273;
+ FillRect(reducx1, 63, 20, 12, 0xE100); 
+ FillRect(reducx1, 63, 20, 12, 0xE100);
+ 
+  
+  
+  
+  }
+//***************************************************************************************************************************************
 // Función para inicializar los fondos
 //***************************************************************************************************************************************
 void fondtr(void){
@@ -304,14 +343,14 @@ xsl2 = 0;
 
 for(int r = 0; r <13  ; r++){
 
-LCD_Bitmap(xsl1, 145, 25, 26, suelo1);
+LCD_Bitmap(xsl1, 188, 25, 26, suelo1);
 
 xsl1= xsl1+25;
 
 }
 for(int r2 = 0; r2 <17; r2++){
-LCD_Bitmap(xsl2, 170, 19, 18, suelo2);  
-LCD_Bitmap(xsl2, 188, 19, 18, suelo2);
+//LCD_Bitmap(xsl2, 170, 19, 18, suelo2);  
+//LCD_Bitmap(xsl2, 188, 19, 18, suelo2);
 LCD_Bitmap(xsl2, 206, 19, 18, suelo2);
 LCD_Bitmap(xsl2, 222, 19, 18, suelo2);
 xsl2= xsl2+19;  
@@ -319,8 +358,8 @@ xsl2= xsl2+19;
 LCD_Bitmap(0, 0, 33, 25, nube1);
 LCD_Bitmap(60, 35, 33, 25, nube1);
 LCD_Bitmap(125, 13, 33, 25, nube1);
-LCD_Bitmap(190, 50, 33, 25, nube1);
-LCD_Bitmap(270,38, 33, 25, nube1);
+LCD_Bitmap(200, 20, 33, 25, nube1);
+LCD_Bitmap(270,28, 33, 25, nube1);
 
 
 
@@ -345,7 +384,7 @@ int fall_1(int ylim2, int width, int height, unsigned char bitmap[]) {
 
 // Jugador 2
 int fall_2(int ylim2, int width, int height, unsigned char bitmap[]) {
-  int anim = (posy2 / 35) % 2;
+  
   if (posy2 < ylim2) {
     delay(18);
     posy2 = posy2 + 2;
@@ -389,6 +428,26 @@ int jump_2(int buttonState, int ylim1, int width, int height, unsigned char bitm
   
   return posy2;
 };
+//****************************************
+// Movimiento
+//****************************************
+//---------------------------------------------Movimiento a la derecha------------------------------------------
+//----------------------------------------------------Jugador 2------------------------------------------------------
+int mov_1(int buttonState, int xlim1,int xlim2, int width, int height, unsigned char bitmap[]) {
+  
+  if (buttonState == 0  & posx2  < xlim2)  {
+    delay(20);
+    posx2 = posx2 + 5;
+    FillRect(posx2-5, posy2 , width, height, fill_color);
+   // H_line(posx2, posy2 + height, width, fill_color);
+    LCD_Bitmap(posx2, posy2, width, height, bitmap);
+    
+    }
+  
+  
+  return posy2;
+};
+
 
 //***************************************************************************************************************************************
 // Función para inicializar LCD
