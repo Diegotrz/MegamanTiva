@@ -58,13 +58,15 @@ int posx1 = 135;
 int posy1 = 153;
 int posx2 = 60;
 int posy2 = 153;
-int anclas_aviones[2] = {0, 0};
+int detectjg[4] = {0, 0,0};
 
 // Variables para control de estados del juego (jugando, fin del juego, reinicio, etc)
 bool jugando = false, ganador = false, apagarControlJ1 = false, apagarControlJ2 = false; 
 //Variables para la generacion de los cuadros de la reduccion de la barra de vida
 int reducx1 = 0;
 int reducx2 = 0;
+//---------------Variables para las colisiones-----------------
+bool colj1 = false, colj2 = false;
 //***************************************************************************************************************************************
 // Functions Prototypes
 //***************************************************************************************************************************************
@@ -199,7 +201,8 @@ while (pj1 <=600){
   LCD_Clear(0x00);
   fondtr();  
   grafvid();
-  reducvid();
+  
+  LCD_Bitmap(200, 150, 33, 25, nube1);
   //LCD_Bitmap(150, 105, 34, 35, xsing);
 }
 
@@ -211,16 +214,16 @@ PB1State = digitalRead(PB1);
 PB2State = digitalRead(PB2);
 // Control de movimientos y desactivación de controles cuando un jugador pierde 
   if (PB1State == 0 && !apagarControlJ2){
-    anclas_aviones[1] = jump_2(PB1State, 85, 34, 35, xsing);
+    detectjg[1] = jump_2(PB1State, 85, 34, 35, xsing);
   } else {
     if (apagarControlJ2){
-      FillRect(posx2, anclas_aviones[1], 38, 28, fill_color);
+      FillRect(posx2, detectjg[1], 38, 28, fill_color);
     } else {
-      anclas_aviones[1] = fall_2(153, 34, 35, xsing);
+      detectjg[1] = fall_2(153, 34, 35, xsing);
     }
   }
   if (PB2State == 0 && !apagarControlJ1){
-   anclas_aviones[1]= mov_1(PB2State ,0,282, 34, 35, xsing);
+   detectjg[0]= mov_1(PB2State ,0,282, 34, 35, xsing);
    // anclas_aviones[0] = jump_1(PB2State, 10, 40, 40, xrun);
   } else {
     if (apagarControlJ1){
@@ -229,7 +232,16 @@ PB2State = digitalRead(PB2);
       //anclas_aviones[0] = fall_1(200, 40, 40, xrun);
     }
   }
-  
+//------------------------------------------Detección de colisiones---------------------------------------------------------
+colj1 = (detectjg[0] == 200);
+  //if (detectjg[0] +34 == 200 ){
+   // colj1= true;
+   // }
+  if (colj1== true){
+      reducvid();
+        
+      }
+      
 
 
 
@@ -445,7 +457,7 @@ int mov_1(int buttonState, int xlim1,int xlim2, int width, int height, unsigned 
     }
   
   
-  return posy2;
+  return posx2;
 };
 
 
