@@ -59,7 +59,12 @@ int posy1 = 153;
 int posx2 = 60;
 int posy2 = 153;
 int detectjg[4] = {0, 0,0};
-
+//-------------------------------------------Variables del uso de la SD----------------------------------------------
+char menu;
+int a = 1;
+#include <SPI.h>
+#include <SD.h>
+File myFile;
 // Variables para control de estados del juego (jugando, fin del juego, reinicio, etc)
 bool jugando = false, ganador = false, apagarControlJ1 = false, apagarControlJ2 = false; 
 //Variables para la generacion de los cuadros de la reduccion de la barra de vida
@@ -92,14 +97,30 @@ extern uint8_t fondo[];
 //***************************************************************************************************************************************
 void setup() {
   SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
-  Serial.begin(9600);
+  Serial.begin(115200);
   GPIOPadConfigSet(GPIO_PORTB_BASE, 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD_WPU);
   LCD_Init();
   LCD_Clear(0x00);
   // configuración de botones
   pinMode(PB1, INPUT_PULLUP);
   pinMode(PB2, INPUT_PULLUP);
- 
+ //-------------------------------------------Configuracion de la SD-------------------------------------------------
+SPI.setModule(0);
+while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+  Serial.print("Initializing SD card...");
+  // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
+  // Note that even if it's not used as the CS pin, the hardware SS pin
+  // (10 on most Arduino boards, 53 on the Mega) must be left as an output
+  // or the SD library functions will not work.
+  pinMode(12, OUTPUT);
+
+  if (!SD.begin(12)) {
+    Serial.println("initialization failed!");
+    return;
+  }
+  Serial.println("initialization done."); 
 //LCD_Sprite(int x, int y, int width, int height, unsigned char bitmap[],int columns, int index, char flip, char offset);
     
   //LCD_Bitmap(unsigned int x, unsigned int y, unsigned int width, unsigned int height, unsigned char bitmap[]);
@@ -170,14 +191,35 @@ if (level == 0){
 
   //-------------------------------------------------
   fondtr();
+ //-----------------------Lectura del personaje en la SD------------------
+ myFile = SD.open("zerorun.txt");
+  if (myFile) {
+    Serial.println("zerorun.txt:");
+
+    // read from the file until there's nothing else in it:
+    while (myFile.available()) {
+     // unsigned char zerorun  = myFile.read();
+     for(int x = 0; x <400; x++){
+    delay(3);
+     int anim2 = (x/35)%4;
+ LCD_Sprite(135,95,52,47,myFile.read(),4,anim2,0,0);
+     }
+    }
+    // close the file:
+    myFile.close();
+  } else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening test.txt");
+  }
+// --------------------------------------------------------------------------
 while (pj1 <=600){
   for(int x = 0; x <400; x++){
     delay(3);
     
-  int anim2 = (x/35)%4;
+  //int anim2 = (x/35)%4;
  // LCD_Sprite(135,95,52,47,zerorun,4,anim2,0,1);
   //int anim = (x/35)%3;
-  //LCD_Sprite(0,0,320,240,fondmov,3,anim,0,0);
+ // LCD_Sprite(0,0,320,240,fondmov,3,anim,0,0);
   
   pj1++;
   }
