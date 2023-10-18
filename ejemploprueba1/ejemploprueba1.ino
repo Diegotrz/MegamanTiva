@@ -59,6 +59,7 @@ int posy1 = 153;
 int posx2 = 60;
 int posy2 = 153;
 int detectjg[4] = {0, 0,0};
+unsigned char suelo3[] = {};
 //-------------------------------------------Variables del uso de la SD----------------------------------------------
 char menu;
 int a = 1;
@@ -192,18 +193,15 @@ if (level == 0){
   //-------------------------------------------------
   fondtr();
  //-----------------------Lectura del personaje en la SD------------------
- myFile = SD.open("zerorun.txt");
+ myFile = SD.open("suelo1.txt");
   if (myFile) {
-    Serial.println("zerorun.txt:");
+    Serial.println("suelo1.txt:");
 
     // read from the file until there's nothing else in it:
     while (myFile.available()) {
-     // unsigned char zerorun  = myFile.read();
-     for(int x = 0; x <400; x++){
-    delay(3);
-     int anim2 = (x/35)%4;
- LCD_Sprite(135,95,52,47,myFile.read(),4,anim2,0,0);
-     }
+    unsigned char   suelo3  = {myFile.read()};
+    
+     Serial.write(suelo3);
     }
     // close the file:
     myFile.close();
@@ -212,12 +210,13 @@ if (level == 0){
     Serial.println("error opening test.txt");
   }
 // --------------------------------------------------------------------------
+
 while (pj1 <=600){
   for(int x = 0; x <400; x++){
     delay(3);
     
-  //int anim2 = (x/35)%4;
- // LCD_Sprite(135,95,52,47,zerorun,4,anim2,0,1);
+  int anim2 = (x/35)%4;
+//  LCD_Sprite(135,95,52,47,zerorun,4,anim2,0,1);
   //int anim = (x/35)%3;
  // LCD_Sprite(0,0,320,240,fondmov,3,anim,0,0);
   
@@ -245,6 +244,7 @@ while (pj1 <=600){
   grafvid();
   
   LCD_Bitmap(200, 150, 33, 25, nube1);
+  LCD_Bitmap(10, 150, 25, 26, suelo3);
   //LCD_Bitmap(150, 105, 34, 35, xsing);
 }
 
