@@ -233,10 +233,11 @@ PB2State = digitalRead(PB2);
     }
   }
 //------------------------------------------Detección de colisiones---------------------------------------------------------
-colj1 = (detectjg[0] == 200);
-  //if (detectjg[0] +34 == 200 ){
-   // colj1= true;
-   // }
+
+//colj1 = (detectjg[0] == 166);
+  if (detectjg[0]  == 200 ){
+    colj1= true;
+    }
   if (colj1== true){
       reducvid();
         
