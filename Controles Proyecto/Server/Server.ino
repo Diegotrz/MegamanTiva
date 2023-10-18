@@ -29,7 +29,7 @@ bool oldDeviceConnected = false;
 #define leftbtn 5
 
 // Pin del Buzzer
-// #define buzzerpin 4
+#define buzzerpin 25
 int pre;
 
 //OST
@@ -239,6 +239,15 @@ void setup() {
 }
 
 void loop() {
+  for(int note = 0; note<47; note++){
+    pre=1000;
+    int t = pre/d1[note];
+    tone(buzzerpin, m1[note], t);
+    int pause = t*1.3;
+    delay(pause);
+    noTone(buzzerpin);
+  }
+
     // The code below keeps the connection status uptodate:
     // Disconnecting
     if (!deviceConnected && oldDeviceConnected) {
