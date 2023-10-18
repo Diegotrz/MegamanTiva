@@ -23,20 +23,19 @@ bool deviceConnected = false;
 bool oldDeviceConnected = false;
 
 //Control buttons
-int leftbtn = 0;
-int rightbtn = 0;
-int jumpbtn = 0;
-int shootbtn = 0;
-
+#define shootbtn 15
+#define jumpbtn 2
+#define rightbtn 4
+#define leftbtn 5
 
 // Pin del Buzzer
-#define buzzerpin 4
+// #define buzzerpin 4
 int pre;
 
 //OST
 //Menú (Password Theme)
 int m1[] = {
-      , NOTE_GS5, NOTE_FS5, NOTE_CS6,
+    NOTE_FS5, NOTE_GS5, NOTE_FS5, NOTE_CS6,
     NOTE_DS6, NOTE_CS6, NOTE_FS6,
     NOTE_F6, NOTE_B5, NOTE_CS6, NOTE_DS6,
     NOTE_FS5, NOTE_GS5, NOTE_FS5, NOTE_CS6, 
@@ -64,6 +63,71 @@ int d1[] = {
     4, 4, 4, 1
 };
 
+//Battle Theme
+int m2[] = {
+    NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_C3,NOTE_C3,
+    NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_D3,NOTE_C3,NOTE_C3,
+    NOTE_D5,NOTE_E5,NOTE_F5,NOTE_A5,NOTE_C6,NOTE_AS5,NOTE_G5,NOTE_AS5,NOTE_A5,NOTE_D5,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_A4,NOTE_AS4,NOTE_C5,NOTE_D6,
+    NOTE_C6,NOTE_AS5,NOTE_A5,NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_C5,
+    NOTE_D5,NOTE_E5,NOTE_F5,NOTE_A5,NOTE_C6,NOTE_AS5,NOTE_G5,NOTE_AS5,NOTE_A5,NOTE_D5,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_C5,
+    NOTE_D5,NOTE_D5,NOTE_F5,NOTE_F5,NOTE_AS5,NOTE_AS5,NOTE_DS6,NOTE_DS6,
+    NOTE_D5,NOTE_D5,1,NOTE_DS5,NOTE_FS5,NOTE_FS5,1,
+    NOTE_DS5,NOTE_D5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_DS5,
+    NOTE_D5,NOTE_D5,1,NOTE_DS5,NOTE_FS5,NOTE_FS5,1,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_DS5,NOTE_FS5,NOTE_AS5,
+    NOTE_D5,NOTE_D5,1,NOTE_DS5,NOTE_FS5,NOTE_FS5,1,
+    NOTE_DS5,NOTE_D5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_DS5,
+    NOTE_D5,NOTE_D5,1,NOTE_DS5,NOTE_FS5,NOTE_FS5,1,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_DS5,NOTE_FS5,NOTE_AS5,
+    NOTE_D5,NOTE_E5,NOTE_F5,NOTE_A5,NOTE_C6,NOTE_AS5,NOTE_G5,NOTE_AS5,NOTE_A5,NOTE_D5,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_A4,NOTE_AS4,NOTE_C5,NOTE_D6,
+    NOTE_C6,NOTE_AS5,NOTE_A5,NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_C5,
+    NOTE_D5,NOTE_E5,NOTE_F5,NOTE_A5,NOTE_C6,NOTE_AS5,NOTE_G5,NOTE_AS5,NOTE_A5,NOTE_D5,
+    NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,NOTE_AS4,NOTE_C5,
+    NOTE_D5,NOTE_D5,NOTE_F5,NOTE_F5,NOTE_AS5,NOTE_AS5,NOTE_DS6,NOTE_DS6,
+    NOTE_DS5,NOTE_D5,NOTE_CS5,NOTE_D5,
+    NOTE_A5,NOTE_A5,NOTE_A5,NOTE_A5,NOTE_A5,NOTE_A5,NOTE_A5,NOTE_A5,
+    NOTE_DS5,NOTE_D5,NOTE_CS5,NOTE_D5,
+    NOTE_DS5,NOTE_D5,NOTE_F5,NOTE_DS5,NOTE_D5,NOTE_A4,
+    NOTE_F5,NOTE_DS5,NOTE_G5,NOTE_F5,NOTE_DS5,NOTE_AS4,
+    NOTE_G5,NOTE_F5,NOTE_A5,NOTE_G5,NOTE_AS5,NOTE_A5,NOTE_C6,NOTE_AS5,
+    NOTE_D6,1,NOTE_D6,1,NOTE_D6,1,NOTE_D6,1,
+    NOTE_F6,NOTE_DS6,NOTE_D6,1,NOTE_D6,1,NOTE_CS6
+};
+int d2[] = {
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,4,3,
+    8,8,8,4,3,8,8,8,8,
+    16,16,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,4,3,
+    4,8,8,2,8,8,8,
+    8,8,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,
+    8,4,8,4,8,8,8,
+    8,8,8,8,8,8,8,
+    8,8,16,16,8,4,8,8,8,
+    8,8,8,8,8,8,8,
+    8,4,8,4,8,8,8,
+    8,8,8,8,8,8,8,
+    8,8,16,16,8,4,8,8,8,
+    8,8,8,8,8,8,8,8,4,3,
+    8,8,8,4,3,8,8,8,8,
+    16,16,8,8,8,8,8,8,
+    8,8,8,8,8,8,8,8,4,3,
+    4,8,8,2,8,8,8,
+    8,8,8,8,8,8,8,8,
+    2,1,2,1,
+    4,4,4,4,4,4,4,4,
+    2,1,2,1,
+    8,8,8,8,8,4,
+    4,8,8,8,5,4,
+    8,8,8,8,8,8,8,8,
+    4,4,4,4,4,4,4,4,
+    3,3,4,4,4,4,1
+};
 
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
@@ -90,26 +154,32 @@ class CharacteristicCallBack: public BLECharacteristicCallbacks {
     String pChar_value_string = String(pChar_value_stdstr.c_str());
     int pChar_value_int = pChar_value_string.toInt();
     if(pChar_value_int == 1){
-      // rightbtn = 1;
+      digitalWrite(shootbtn, HIGH);
       Serial.println("El boton presionado es Shoot");
     }
     else if(pChar_value_int == 2){
-      // leftbtn = 1;
+      digitalWrite(jumpbtn, HIGH);
       Serial.println("El boton presionado es Jump");
     }
     else if(pChar_value_int == 3){
-      // leftbtn = 1;
+      digitalWrite(rightbtn, HIGH);
       Serial.println("El boton presionado es Right");
     }
     else if(pChar_value_int == 4){
-      // leftbtn = 1;
+      digitalWrite(leftbtn, HIGH);
       Serial.println("El boton presionado es Left");
     }
+    digitalWrite(jumpbtn, LOW);
+    digitalWrite(rightbtn, LOW);
   }
 };
 
 void setup() {
   Serial.begin(115200);
+  pinMode(shootbtn, OUTPUT);
+  pinMode(jumpbtn, OUTPUT);
+  pinMode(leftbtn, OUTPUT);
+  pinMode(rightbtn, OUTPUT);
 
   // Create the BLE Device
   BLEDevice::init("ESP32");
@@ -157,10 +227,18 @@ void setup() {
   //   delay(pause);
   //   noTone(buzzerpin);
   //  }
+  //Battle Theme
+  // for(int note = 0; note<231; note++){
+  //   pre = 1000;
+  //   int t = pre/d2[note];
+  //   tone(PC_4, m2[note], t);
+  //   int pause = t*1.3;
+  //   delay(pause);
+  //   noTone(PC_4);
+  // }
 }
 
 void loop() {
-
     // The code below keeps the connection status uptodate:
     // Disconnecting
     if (!deviceConnected && oldDeviceConnected) {
